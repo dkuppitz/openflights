@@ -1,4 +1,5 @@
 !https://github.com/tinkerpop/gremlin/raw/master/docs/images/gremlin-plane.png!
+image:https://raw.githubusercontent.com/dkuppitz/openflights/master/docs/images/gremlin-plane.png[TinkerPop3, link="http://tinkerpop.incubator.apache.org"]
 
 0. Clone project into /projects/datastax/openflights
 1. Download data files (run ${PROJECT_DIR}/data/download.sh)
