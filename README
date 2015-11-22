@@ -1,3 +1,5 @@
+!https://github.com/tinkerpop/gremlin/raw/master/docs/images/gremlin-plane.png!
+
 0. Clone project into /projects/datastax/openflights
 1. Download data files (run ${PROJECT_DIR}/data/download.sh)
 2. In a Titan 0.5.4 Gremlin console:
