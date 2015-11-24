@@ -22,7 +22,7 @@ This tutorial assumes that the reader is knowledgeable with respect to Titan 0.5
 
 # The Tutorial
 
-For those wishing to get right to the abbreviated steps required to run this tutorial, they can be found at the [bottom](#for_the_impatient).
+For those wishing to get right to the abbreviated steps required to run this tutorial, they can be found at the [bottom](#for-the-impatient).
 
 ## The Schema
 
