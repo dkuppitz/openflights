@@ -52,13 +52,24 @@ The next step is to use the Titan 0.5.4 Gremlin Console to run the [scripts/load
 Start the Titan 0.5.4 Gremlin Console and execute the script:
 
 ```text
-ADD CONSOLE OUTPUTS HERE
+`gremlin> . ${OPENFLIGHTS_HOME}/scripts/load-openflights-tp2.groovy`
 ```
 
-Depending on what you hope to learn from this tutorial, there are two interesting points to consider in this script:
+Depending on what the reader hopes to learn from this tutorial, there are two interesting points to possibly consider in this script:
 
 * The `location` property on the `airport` vertex is a `Geoshape` data type.
 * The `equipment` property on the `route` vertex is a `SET` multi-property.
+
+With that script executed, Titan now has the graph generated, but that script did something else at the very end.  It dumped that data into HDFS using Titan's `HadoopGraph` as shown in the final lines of the script:
+
+```groovy
+g = HadoopGraph.open(PROJECT_DIR + "/conf/hadoop/openflights-tp2.properties")
+g._()
+```
+
+The contents of [conf/hadoop/openflights-tp2.properties](https://github.com/dkuppitz/openflights/blob/master/conf/hadoop/openflights-tp2.properties) shows that it uses the `TitanCassandraInputFormat` to read the data from Cassandra and the `GraphSONOutputFormat` to write it to the file system. In this case, Hadoop's local job runner will write the output to the local file system. In a production environment, given a large scale graph migration, it would be preferred to have a Hadoop cluster with HDFS up and running for this output. As a side note, if this process is being executed against a different Titan backend (i.e. not Cassandra), then the input format should be changed to match the backend being used.
+
+Now that the OpenFlights graph data is available on the filesystem as GraphSON, it becomes possible to read that format into Titan 1.0.0.
 
 ## Migrating to Titan 1.0.0
 
