@@ -77,7 +77,7 @@ Apache TinkerPop 3.x introduced features for generalized bulk loading over diffe
 
 As stated earlier, the `BulkLoaderVertexProgram` that ships with TinkerPop 3.x is meant to provided generalized bulk loading capabilities.  Unfortunately, a minor [bug](https://issues.apache.org/jira/browse/TINKERPOP3-973) prevents it's usage, so that class is provided here with the patch. The issue is expected to be fixed for TinkerPop 3.1.1, at which point usage of the included `OpenflightsBulkLoaderVertexProgram` will no longer be necessary. This instance will still be referred to as "BLVP" in this tutorial.
 
-BLVP utilizes an `IncrementalBulkLoader` for "getOrCreate" functionality.  In other words, the `IncrementalBulkLoader` has implementations of methods that check for graph `Element` existence and if present "get" them or otherwise "create" them.  By extending this class, it becomes possible to customize those "getOrCreate" operations. For OpenFlights, it is necessary to customize how `VertexProperty` elements are managed. Specifically, it is important to ensure that the correct `Cardinality` is used for migrating the `equipment` property:
+BLVP utilizes an `IncrementalBulkLoader` for "getOrCreate" functionality.  In other words, the `IncrementalBulkLoader` has implementations of methods that check for graph `Element` existence and if present "get" them or otherwise "create" them.  By extending this class, it becomes possible to customize those "getOrCreate" operations. For OpenFlights, it is necessary to customize how `VertexProperty` elements are managed. Specifically, it is important to ensure that the correct `Cardinality` is used for migrating the `equipment` multi-property:
 
 ```java
 public class OpenflightsBulkLoader extends IncrementalBulkLoader {
@@ -91,6 +91,44 @@ public class OpenflightsBulkLoader extends IncrementalBulkLoader {
 }
 ````
 
+All other properties can be set by the standard method provided in the `IncrementalBulkLoader`.  
+
+Given this new familiarty that has been developed with the Java code portion of this repository, it is now time to build the project with Maven:
+
+```text
+$mvn clean install -DskipTests
+```
+
+Copy the resulting `target/openflights-1.0-SNAPSHOT.jar` file to the Titan 1.0.0 `ext` directory, which makes it available on Titan's path. Before it is possible to use BLVP and the custom jar file, the GraphSON file that was dumped from Cassandra to the local file system needs to be moved into the home directory of Hadoop 2 HDFS so that BLVP can operate on it through Spark.
+
+```text
+HADOOP FS STUFFF
+```
+
+As with the data load to Titan 0.5.4, a Groovy script will be used.  The [scripts/load-openflights-tp3.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/load-openflights-tp3.groovy) first creates the schema in Titan 1.0.0 and then load the data using BLVP and Spark. It is assumed that experienced Titan users will recognize the syntax for schema creation, so the focus for this tutorial is on executing the BLVP:
+
+```groovy
+graph = GraphFactory.open(PROJECT_DIR + "/conf/hadoop/openflights-tp3.properties")
+
+writeGraph = PROJECT_DIR + "/conf/openflights.properties"
+blvp = OpenflightsBulkLoaderVertexProgram.build().keepOriginalIds(false).writeGraph(writeGraph).
+        intermediateBatchSize(10000).bulkLoader(OpenflightsBulkLoader).create(graph)
+graph.compute(SparkGraphComputer).program(blvp).submit().get()
+```
+
+The first line creates a `HadoopGraph` instance, which is configured by [conf/hadoop/openflights-tp3.properties](https://github.com/dkuppitz/openflights/blob/master/conf/hadoop/openflights-tp3.properties).  This configuration tells `HadoopGraph` to read the Titan 0.5.4 GraphSON format using [ScriptInputFormat](http://tinkerpop.apache.org/docs/3.1.0-incubating/#script-io-format).  `ScriptInputFormat` takes an arbitrary Groovy script and uses it to read `Vertex` objects. It is a good format to use when the graph data being read is in a custom format. In a sense, the GraphSON generated from the Titan 0.5.4 dump is "custom", because the format changed between TinkerPop 2.x and TinkerPop 3.x and there is `Geoshape` data encoded in that GraphSON, which is a type specific to Titan. The script to be used is referenced in that properties file given to the `HadoopGraph` and is called [scripts/openflights-script-input.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/openflights-script-input.groovy).  Copy this file to HDFS alongside the data file copied previously:
+
+```text
+HADOOP FS STUFFF
+```
+
+The environment should now be ready to execute the migration script in full:
+
+```text
+gremlin> :load ${OPENFLIGHTS_HOME}/scripts/load-openflights-tp3.groovy
+```
+
+When that script completes successfully, the data will have been written to Titan 1.0.0 and the migration from Titan 0.5.4 will be complete.
 
 # For the Impatient
 
