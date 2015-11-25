@@ -34,19 +34,19 @@ OpenFlights is an open data set containing [airport, airline and route data](htt
 
 # For the Impatient
 
-0. Clone project into /projects/datastax/openflights
-1. Download data files (run ${PROJECT_DIR}/data/download.sh)
-2. In a Titan 0.5.4 Gremlin console:
+0. Clone the project and set an environment variable that holds the path to the projects (e.g. `export OPENFLIGHTS_HOME="/projects/openflights"`)
+1. Download data files (run ${OPENFLIGHTS_HOME}/data/download.sh)
+2. In a Titan 0.5.4 Gremlin console type (note that you cannot use `${OPENFLIGHTS_HOME}` for the console's load command, hence you'll have to replace it with the full path):
 
-     gremlin> . /projects/datastax/openflights/scripts/load-openflights-tp2.groovy
+     `gremlin> . ${OPENFLIGHTS_HOME}/scripts/load-openflights-tp2.groovy`
 
 3. Copy the output files (from the output/ directory in HDFS) into a Hadoop2 HDFS directory called openflights
-4. upload the script ${PROJECT_DIR}/scripts/openflights-script-input.groovy into Hadoop2's HDFS home directory
+4. upload the script ${OPENFLIGHTS_HOME}/scripts/openflights-script-input.groovy into Hadoop2's HDFS home directory
 5. compile the project:
 
-     $ mvn clean install -DskipTests
+     `$ mvn clean install -DskipTests`
 
-6. Copy the jar file ${PROJECT_DIR}/target/openflights-1.0-SNAPSHOT.jar into ${TITAN_1_0_HOME}/ext/
+6. Copy the jar file ${OPENFLIGHTS_HOME}/target/openflights-1.0-SNAPSHOT.jar into ${TITAN_1_0_HOME}/ext/
 5. In a Titan 1.0.0 Gremlin console:
 
-     gremlin> :load /projects/datastax/openflights/scripts/load-openflights-tp3.groovy
+     `gremlin> :load ${OPENFLIGHTS_HOME}/scripts/load-openflights-tp3.groovy`

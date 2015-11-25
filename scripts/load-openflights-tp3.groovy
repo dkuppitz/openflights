@@ -19,7 +19,7 @@
 import com.datastax.openflights.OpenflightsBulkLoader
 import com.thinkaurelius.titan.core.Cardinality
 
-PROJECT_DIR = "/projects/datastax/openflights"
+PROJECT_DIR = System.getenv("OPENFLIGHTS_HOME")
 
 g = TitanFactory.open(PROJECT_DIR + "/conf/openflights-tp3.properties")
 g.close()

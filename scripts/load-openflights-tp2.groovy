@@ -22,7 +22,7 @@ groovy.grape.Grape.grab(group: 'com.xlson.groovycsv', module: 'groovycsv', versi
 import com.thinkaurelius.titan.core.Cardinality
 import com.xlson.groovycsv.CsvParser
 
-PROJECT_DIR = "/projects/datastax/openflights"
+PROJECT_DIR = System.getenv("OPENFLIGHTS_HOME")
 DATA_DIR = PROJECT_DIR + "/data"
 
 g = TitanFactory.open(PROJECT_DIR + "/conf/openflights-tp2.properties")
