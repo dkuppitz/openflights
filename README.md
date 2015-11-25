@@ -15,6 +15,7 @@ This repository contains all the code required to simulate a data migration from
 * Titan 0.5.4 and Titan 1.0.0
 * Cassandra as [compatible](http://s3.thinkaurelius.com/docs/titan/1.0.0/version-compat.html) with the Titan versions above (while the tutorial focuses on Cassandra, there should be no reason that these steps will not also work for other Titan backends)
 * Hadoop 2
+* `git clone` this repository set an environment variable to the location of where it was cloned `export OPENFLIGHTS_HOME="/projects/openflights"`)`
 
 ## Assumptions
 
@@ -26,9 +27,38 @@ For those wishing to get right to the abbreviated steps required to run this tut
 
 ## The Schema
 
-OpenFlights is an open data set containing [airport, airline and route data](http://openflights.org/data.html). It bears sufficient complexity so as to make for a good model for a real-world data migration. Specifically, it allows for the modelling of [multi-properties](http://s3.thinkaurelius.com/docs/titan/1.0.0/schema.html#property-cardinality) and mixed indices containing [Geoshape](http://s3.thinkaurelius.com/docs/titan/1.0.0/search-predicates.html#_geoshape_data_type) data. 
+OpenFlights is an open data set containing [airport, airline and route data](http://openflights.org/data.html). While the dataset is not large, it bears sufficient complexity so as to make for a good model for a real-world data migration. Specifically, it allows for the modelling of [multi-properties](http://s3.thinkaurelius.com/docs/titan/1.0.0/schema.html#property-cardinality) and mixed indices containing [Geoshape](http://s3.thinkaurelius.com/docs/titan/1.0.0/search-predicates.html#_geoshape_data_type) data. 
 
 ## Loading Titan 0.5.4
+
+Before the migration process can be started, the Titan 0.5.4 database needs to be loaded wth data.  The first step in the process is to download the OpenFlights source data which is in CSV format.  The [data/download.sh](https://github.com/dkuppitz/openflights/blob/master/data/download.sh) shell script will help with that:
+
+```text
+$ data/download.sh
+--2015-11-25 07:20:28--  https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 23.235.46.133
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|23.235.46.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+...
+Downloaded: 3 files, 3.4M in 1.2s (2.92 MB/s)
+$ ls data
+airlines.dat  airports.dat  download.sh  routes.dat
+```
+
+Note that Windows users can manually download these files to the `data` directory as the above script is meant for execution on Linux compatible systems.
+
+The next step is to use the Titan 0.5.4 Gremlin Console to run the [scripts/load-openflights-tp2.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/load-openflights-tp2.groovy) script. This script will initialize the schema and parse the data into Titan. This script configures the Titan instance to load to through the [conf/openflights-tp2.properties](https://github.com/dkuppitz/openflights/blob/master/conf/openflights-tp2.properties).  This file defaults to local Cassandra usage, but could changed to support a remote Cassandra cluster, HBase or other Titan backend.
+
+Start the Titan 0.5.4 Gremlin Console and execute the script:
+
+```text
+ADD CONSOLE OUTPUTS HERE
+```
+
+Depending on what you hope to learn from this tutorial, there are two interesting points to consider in this script:
+
+* The `location` property on the `airport` vertex is a `Geoshape` data type.
+* The `equipment` property on the `route` vertex is a `SET` multi-property.
 
 ## Migrating to Titan 1.0.0
 
