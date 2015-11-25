@@ -6,7 +6,7 @@ This document and the associated code in this repository are designed to help wi
 
 ## Approach
 
-This repository contains all the code required to simulate a data migration from Titan 0.5.4 to Titan 1.0.0. It provides Groovy scripts and Java code that together will generate the Titan 0.5.4 instance from the OpenFlights data set and then migrate it to Titan 1.0.0.  
+<img src="https://raw.githubusercontent.com/thinkaurelius/titan/titan10/docs/static/images/titan-kneeling.png" align="right">This repository contains all the code required to simulate a data migration from Titan 0.5.4 to Titan 1.0.0. It provides Groovy scripts and Java code that together will generate the Titan 0.5.4 instance from the OpenFlights data set and then migrate it to Titan 1.0.0.  
 
 ## Prerequisites
 
