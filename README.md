@@ -99,10 +99,10 @@ Given this new familiarity that has been developed with the Java code portion of
 $mvn clean install -DskipTests
 ```
 
-Copy the resulting `target/openflights-1.0-SNAPSHOT.jar` file to the Titan 1.0.0 `ext` directory, which makes it available on Titan's path. Before it is possible to use BLVP and the custom jar file, the GraphSON file that was dumped from Cassandra to the local file system needs to be moved into the home directory of Hadoop 2 HDFS so that BLVP can operate on it through Spark.
+Copy the resulting `target/openflights-1.0-SNAPSHOT.jar` file to the Titan 1.0.0 `ext` directory, which makes it available on Titan's path. Before it is possible to use BLVP and the custom jar file, the GraphSON file that was dumped from Cassandra to the local file system needs to be moved into an `openflights` directory of Hadoop 2 HDFS so that BLVP can operate on it through Spark.
 
 ```text
-HADOOP FS STUFFF
+SOME HADOOP COMMANDS
 ```
 
 As with the data load to Titan 0.5.4, a Groovy script will be used.  The [scripts/load-openflights-tp3.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/load-openflights-tp3.groovy) first creates the schema in Titan 1.0.0 and then load the data using BLVP and Spark. It is assumed that experienced Titan users will recognize the syntax for schema creation, so the focus for this tutorial is on executing the BLVP:
