@@ -60,7 +60,7 @@ Depending on what the reader hopes to learn from this tutorial, there are two in
 * The `location` property on the `airport` vertex is a `Geoshape` data type.
 * The `equipment` property on the `route` vertex is a `SET` multi-property.
 
-With that script executed, Titan now has the graph generated, but that script did something else at the very end.  It dumped that data into HDFS using Titan's `HadoopGraph` as shown in the final lines of the script:
+With that script executed, Titan now has the graph generated, but that script did something else at the very end.  It dumped that data to GraphSON format using Titan's `HadoopGraph` as shown in the final lines of the script:
 
 ```groovy
 g = HadoopGraph.open(PROJECT_DIR + "/conf/hadoop/openflights-tp2.properties")
