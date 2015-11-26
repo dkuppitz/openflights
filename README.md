@@ -96,12 +96,14 @@ All other properties can be set by the standard method provided in the `Incremen
 Given this new familiarity that has been developed with the Java code portion of this repository, it is now time to build the project with Maven:
 
 ```text
-$mvn clean install -DskipTests
+$ mvn clean install -DskipTests
 ```
 
 Copy the resulting `target/openflights-1.0-SNAPSHOT.jar` file to the Titan 1.0.0 `ext` directory, which makes it available on Titan's path. Before it is possible to use BLVP and the custom jar file, the GraphSON file that was dumped from Cassandra to the local file system needs to be moved into an `openflights` directory of Hadoop 2 HDFS so that BLVP can operate on it through Spark.
 
 ```text
+$ hadoop fs -mkdir openflights
+$ hadoop fs -copyFromLocal part-m-* openflights
 SOME HADOOP COMMANDS
 ```
 
@@ -119,7 +121,7 @@ graph.compute(SparkGraphComputer).program(blvp).submit().get()
 <img src="https://raw.githubusercontent.com/apache/incubator-tinkerpop/master/docs/static/images/batch-graph.png" align="left" width="275">The first line creates a `HadoopGraph` instance, which is configured by [conf/hadoop/openflights-tp3.properties](https://github.com/dkuppitz/openflights/blob/master/conf/hadoop/openflights-tp3.properties).  This configuration tells `HadoopGraph` to read the Titan 0.5.4 GraphSON format using [ScriptInputFormat](http://tinkerpop.apache.org/docs/3.1.0-incubating/#script-io-format).  `ScriptInputFormat` takes an arbitrary Groovy script and uses it to read `Vertex` objects. It is a good format to use when the graph data being read is in a custom format. In a sense, the GraphSON generated from the Titan 0.5.4 dump is "custom", because the format changed between TinkerPop 2.x and TinkerPop 3.x and there is `Geoshape` data encoded in that GraphSON, which is a type specific to Titan. The script to be used is referenced in that properties file given to the `HadoopGraph` and is called [scripts/openflights-script-input.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/openflights-script-input.groovy).  Copy this file to HDFS alongside the data file copied previously:
 
 ```text
-HADOOP FS STUFFF
+gremlin> hdfs.copyFromLocal(System.getenv('OPENFLIGHTS_HOME') + '/scripts/openflights-script-input.groovy', 'openflights-script-input.groovy')
 ```
 
 The environment should now be ready to execute the migration script in full:
