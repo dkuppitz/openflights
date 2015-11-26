@@ -150,3 +150,7 @@ When that script completes successfully, the data will have been written to Tita
 5. In a Titan 1.0.0 Gremlin console:
 
      `gremlin> :load ${OPENFLIGHTS_HOME}/scripts/load-openflights-tp3.groovy`
+
+# Conclusion
+
+This tutorial provides a working model for doing a small data migration from Titan 0.5.4 to Titan 1.0.0.  It demonstrates some important new features of TinkerPop 3 that would allow this same model to be applied on a far larger scale. For those who have read this tutorial, the task that lies ahead involves adapting the model to the specifics of their individual production environments. It may also require more detailed reading of the TinkerPop [reference documentation](http://tinkerpop.apache.org/docs/3.0.2-incubating/) to fully grasp all the aspects of what has been presented here.
