@@ -29,7 +29,7 @@ For those wishing to get right to the abbreviated steps required to run this tut
 
 ## The Schema
 
-OpenFlights is an open data set containing [airport, airline and route data](http://openflights.org/data.html). While the dataset is not large, it bears sufficient complexity so as to make for a good model for a real-world data migration. Specifically, it allows for the modelling of [multi-properties](http://s3.thinkaurelius.com/docs/titan/1.0.0/schema.html#property-cardinality) and mixed indices containing [Geoshape](http://s3.thinkaurelius.com/docs/titan/1.0.0/search-predicates.html#_geoshape_data_type) data. 
+OpenFlights is an open data set containing [airport, airline and route data](http://openflights.org/data.html). While the dataset is not large, it bears sufficient complexity so as to provide a good model for a real-world data migration. Specifically, it allows for the modelling of [multi-properties](http://s3.thinkaurelius.com/docs/titan/1.0.0/schema.html#property-cardinality) and mixed indices containing [Geoshape](http://s3.thinkaurelius.com/docs/titan/1.0.0/search-predicates.html#_geoshape_data_type) data. 
 
 ## Loading Titan 0.5.4
 
