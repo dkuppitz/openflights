@@ -106,10 +106,9 @@ Copy the resulting `target/openflights-1.0-SNAPSHOT.jar` file to the Titan 1.0.0
 ```text
 $ hadoop fs -mkdir openflights
 $ hadoop fs -copyFromLocal part-m-* openflights
-SOME HADOOP COMMANDS
 ```
 
-As with the data load to Titan 0.5.4, a Groovy script will be used for the Titan 1.0.0 work.  The [scripts/load-openflights-tp3.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/load-openflights-tp3.groovy) first creates the schema in Titan 1.0.0 and then load the data using BLVP and Spark. It is assumed that experienced Titan users will recognize the syntax for schema creation, so the focus for this tutorial is on executing the BLVP portion of the script:
+As with the data load to Titan 0.5.4, a Groovy script will be used for the Titan 1.0.0 work.  The [scripts/load-openflights-tp3.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/load-openflights-tp3.groovy) first creates the schema in Titan 1.0.0 and then loads the data using BLVP and Spark. It is assumed that experienced Titan users will recognize the syntax for schema creation, so the focus for this tutorial is on executing the BLVP portion of the script:
 
 ```groovy
 graph = GraphFactory.open(PROJECT_DIR + "/conf/hadoop/openflights-tp3.properties")
