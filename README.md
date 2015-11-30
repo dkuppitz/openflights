@@ -17,7 +17,7 @@ The following list are prerequisites for executing the data migration model for 
 * Titan 0.5.4 and Titan 1.0.0
 * Cassandra as [compatible](http://s3.thinkaurelius.com/docs/titan/1.0.0/version-compat.html) with the Titan versions above (while the tutorial focuses on Cassandra, there should be no reason that these steps will not also work for other Titan backends)
 * Hadoop 2
-* `git clone` this repository set an environment variable to the location of where it was cloned `export OPENFLIGHTS_HOME="/projects/openflights"`)`
+* `git clone` this repository and set an environment variable to the location of where it was cloned `export OPENFLIGHTS_HOME="/projects/openflights"`)`
 
 ## Assumptions
 
