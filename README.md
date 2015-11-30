@@ -51,10 +51,10 @@ Note that Windows users can manually download these files to the `data` director
 
 The next step is to use the Titan 0.5.4 Gremlin Console to run the [scripts/load-openflights-tp2.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/load-openflights-tp2.groovy) script. This script will initialize the schema and parse the data into Titan. This script configures the target Titan instance to which data will be loaded and uses the Titan configuration at [conf/openflights-tp2.properties](https://github.com/dkuppitz/openflights/blob/master/conf/openflights-tp2.properties) for this purpose.  This file defaults to local Cassandra usage, but could be changed to support a remote Cassandra cluster, HBase or other Titan backend.
 
-Start the Titan 0.5.4 Gremlin Console and execute the script:
+Start the Titan 0.5.4 Gremlin Console and execute the script (in this case, be sure to replace `${OPENFLIGHTS_HOME}` with the full path to that file):
 
 ```text
-`gremlin> . ${OPENFLIGHTS_HOME}/scripts/load-openflights-tp2.groovy`
+gremlin> . ${OPENFLIGHTS_HOME}/scripts/load-openflights-tp2.groovy
 ```
 
 Depending on what the reader hopes to learn from this tutorial, there are two interesting points to possibly consider in this script:
@@ -69,7 +69,7 @@ g = HadoopGraph.open(PROJECT_DIR + "/conf/hadoop/openflights-tp2.properties")
 g._()
 ```
 
-<img src="https://raw.githubusercontent.com/thinkaurelius/titan/titan10/docs/static/images/faunus-character.png" align="left" width="125">It is this step that is most pertient to those attempting to do data migrations from Titan 0.5.4, in that their best approach to a migration will be to dump their data to GraphSON.  The contents of [conf/hadoop/openflights-tp2.properties](https://github.com/dkuppitz/openflights/blob/master/conf/hadoop/openflights-tp2.properties) shows that it uses the `TitanCassandraInputFormat` to read the data from Cassandra and the `GraphSONOutputFormat` to write it to the file system. In this case, Hadoop's local job runner will write the output to the local file system. In a production environment, given a large scale graph migration, it would be preferred to have a Hadoop cluster with HDFS up and running for this output. As a side note, if this process is being executed against a different Titan backend (i.e. not Cassandra), then the input format should be changed to match the backend being used.
+<img src="https://raw.githubusercontent.com/thinkaurelius/titan/titan10/docs/static/images/faunus-character.png" align="left" width="125">It is this step that is most pertient to those attempting to do data migrations from Titan 0.5.4, in that their best approach to a migration will be to dump their data to GraphSON.  The contents of [conf/hadoop/openflights-tp2.properties](https://github.com/dkuppitz/openflights/blob/master/conf/hadoop/openflights-tp2.properties) shows that it uses the `TitanCassandraInputFormat` to read the data from Cassandra and the `GraphSONOutputFormat` to write it to the file system. In this case, Hadoop's local job runner will write the output to the local file system. In a production environment, given a large scale graph migration, it would be preferred to have a Hadoop cluster with HDFS up and running to house this output. As a side note, if this process is being executed against a different Titan backend (i.e. not Cassandra), then the input format should be changed to match the backend being used.
 
 Now that the OpenFlights graph data is available on the filesystem as GraphSON, it becomes possible to read that format into Titan 1.0.0.
 
@@ -79,7 +79,7 @@ Apache TinkerPop 3.x introduced features for generalized bulk loading over diffe
 
 <img src="https://raw.githubusercontent.com/apache/incubator-tinkerpop/master/docs/static/images/gremlin-spark.png" align="right" width="200">As stated earlier, the `BulkLoaderVertexProgram` that ships with TinkerPop 3.x is meant to provided generalized bulk loading capabilities.  Unfortunately, a minor [bug](https://issues.apache.org/jira/browse/TINKERPOP3-973) prevents it's usage, so that class is provided here with the patch. The issue is expected to be fixed for TinkerPop 3.1.1, at which point usage of the included `OpenflightsBulkLoaderVertexProgram` will no longer be necessary. This instance will still be referred to as "BLVP" in this tutorial.
 
-BLVP utilizes an `IncrementalBulkLoader` for "getOrCreate" functionality.  In other words, the `IncrementalBulkLoader` has implementations of methods that check for graph `Element` existence and if present "get" them or otherwise "create" them.  By extending this class, it becomes possible to customize those "getOrCreate" operations. For OpenFlights, it is necessary to customize how `VertexProperty` elements are managed. Specifically, it is important to ensure that the correct `Cardinality` is used for migrating the `equipment` multi-property:
+BLVP utilizes an `IncrementalBulkLoader` for "getOrCreate" functionality.  In other words, the `IncrementalBulkLoader` has implementations of methods that check for graph `Element` existence and, if present, "get" them or otherwise "create" them.  By extending this class, it becomes possible to customize those "getOrCreate" operations. For OpenFlights, it is necessary to customize how `VertexProperty` elements are managed. Specifically, it is important to ensure that the correct `Cardinality` is used for migrating the `equipment` multi-property:
 
 ```java
 public class OpenflightsBulkLoader extends IncrementalBulkLoader {
@@ -109,7 +109,7 @@ $ hadoop fs -copyFromLocal part-m-* openflights
 SOME HADOOP COMMANDS
 ```
 
-As with the data load to Titan 0.5.4, a Groovy script will be used.  The [scripts/load-openflights-tp3.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/load-openflights-tp3.groovy) first creates the schema in Titan 1.0.0 and then load the data using BLVP and Spark. It is assumed that experienced Titan users will recognize the syntax for schema creation, so the focus for this tutorial is on executing the BLVP:
+As with the data load to Titan 0.5.4, a Groovy script will be used for the Titan 1.0.0 work.  The [scripts/load-openflights-tp3.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/load-openflights-tp3.groovy) first creates the schema in Titan 1.0.0 and then load the data using BLVP and Spark. It is assumed that experienced Titan users will recognize the syntax for schema creation, so the focus for this tutorial is on executing the BLVP portion of the script:
 
 ```groovy
 graph = GraphFactory.open(PROJECT_DIR + "/conf/hadoop/openflights-tp3.properties")
@@ -137,22 +137,22 @@ When that script completes successfully, the data will have been written to Tita
 # For the Impatient
 
 0. Clone the project and set an environment variable that holds the path to the projects (e.g. `export OPENFLIGHTS_HOME="/projects/openflights"`)
-1. Download data files (run ${OPENFLIGHTS_HOME}/data/download.sh)
-2. In a Titan 0.5.4 Gremlin console type (note that you cannot use `${OPENFLIGHTS_HOME}` for the console's load command, hence you'll have to replace it with the full path):
+1. Download data files (run `${OPENFLIGHTS_HOME}/data/download.sh`)
+2. In a Titan 0.5.4 Gremlin console type (be sure to replace`${OPENFLIGHTS_HOME}` with the full path in this case):
 
      `gremlin> . ${OPENFLIGHTS_HOME}/scripts/load-openflights-tp2.groovy`
 
-3. Copy the output files (from the output/ directory in HDFS) into a Hadoop2 HDFS directory called openflights
-4. upload the script ${OPENFLIGHTS_HOME}/scripts/openflights-script-input.groovy into Hadoop2's HDFS home directory
-5. compile the project:
+3. Copy the output files (from the `output/` directory in HDFS) into a Hadoop2 HDFS directory called `openflights`
+4. Upload the script `${OPENFLIGHTS_HOME}/scripts/openflights-script-input.groovy` into Hadoop2's HDFS home directory
+5. Compile the project:
 
      `$ mvn clean install -DskipTests`
 
-6. Copy the jar file ${OPENFLIGHTS_HOME}/target/openflights-1.0-SNAPSHOT.jar into ${TITAN_1_0_HOME}/ext/
+6. Copy the jar file `${OPENFLIGHTS_HOME}/target/openflights-1.0-SNAPSHOT.jar` into `${TITAN_1_0_HOME}/ext/`
 5. In a Titan 1.0.0 Gremlin console:
 
      `gremlin> :load ${OPENFLIGHTS_HOME}/scripts/load-openflights-tp3.groovy`
 
 # Conclusion
 
-This tutorial provides a working model for doing a small data migration from Titan 0.5.4 to Titan 1.0.0.  It demonstrates some important new features of TinkerPop 3 that would allow this same model to be applied on a far larger scale. For those who have read this tutorial, the task that lies ahead involves adapting the model to the specifics of their individual production environments. It may also require more detailed reading of the TinkerPop [reference documentation](http://tinkerpop.apache.org/docs/3.0.2-incubating/) to fully grasp all the aspects of what has been presented here.
+This tutorial provides a working model for doing a data migration from Titan 0.5.4 to Titan 1.0.0.  It demonstrates some important new features of TinkerPop 3 that would allow this same model to be applied on a far larger scale. For those who have read this tutorial, the task that lies ahead involves adapting the model to the specifics of their individual production environments. It may also require more detailed reading of the TinkerPop [reference documentation](http://tinkerpop.apache.org/docs/3.0.2-incubating/) to fully grasp all the aspects of what has been presented here.
