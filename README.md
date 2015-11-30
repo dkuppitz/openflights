@@ -6,9 +6,11 @@ This README and the associated code in this repository are designed to help with
 
 ## Approach
 
-<img src="https://raw.githubusercontent.com/thinkaurelius/titan/titan10/docs/static/images/titan-kneeling.png" align="right">This repository contains all the code required to simulate a data migration from Titan 0.5.4 to Titan 1.0.0. It provides Groovy scripts and Java code that together will generate the Titan 0.5.4 instance from the OpenFlights data set and then migrate it to Titan 1.0.0.  
+<img src="https://raw.githubusercontent.com/thinkaurelius/titan/titan10/docs/static/images/titan-kneeling.png" align="right">This repository contains all the code required to simulate a data migration from Titan 0.5.4 to Titan 1.0.0. It provides Groovy scripts and Java code that together will generate the Titan 0.5.4 instance from the OpenFlights data set and then migrate it to Titan 1.0.0. 
 
 ## Prerequisites
+
+The following list are prerequisites for executing the data migration model for OpenFlights.  Actual requirements for a data migration may be different depending on the user's environment:
 
 * Java 1.8.0_40+ (required by TinkerPop 3.x)
 * Maven 3.x
