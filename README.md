@@ -49,7 +49,7 @@ airlines.dat  airports.dat  download.sh  routes.dat
 
 Note that Windows users can manually download these files to the `data` directory as the above script is meant for execution on Linux compatible systems.
 
-The next step is to use the Titan 0.5.4 Gremlin Console to run the [scripts/load-openflights-tp2.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/load-openflights-tp2.groovy) script. This script will initialize the schema and parse the data into Titan. This script configures the Titan instance to load to through the [conf/openflights-tp2.properties](https://github.com/dkuppitz/openflights/blob/master/conf/openflights-tp2.properties).  This file defaults to local Cassandra usage, but could changed to support a remote Cassandra cluster, HBase or other Titan backend.
+The next step is to use the Titan 0.5.4 Gremlin Console to run the [scripts/load-openflights-tp2.groovy](https://github.com/dkuppitz/openflights/blob/master/scripts/load-openflights-tp2.groovy) script. This script will initialize the schema and parse the data into Titan. This script configures the target Titan instance to which data will be loaded and uses the Titan configuration at [conf/openflights-tp2.properties](https://github.com/dkuppitz/openflights/blob/master/conf/openflights-tp2.properties) for this purpose.  This file defaults to local Cassandra usage, but could be changed to support a remote Cassandra cluster, HBase or other Titan backend.
 
 Start the Titan 0.5.4 Gremlin Console and execute the script:
 
