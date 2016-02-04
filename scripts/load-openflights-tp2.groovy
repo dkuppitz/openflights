@@ -177,6 +177,6 @@ routes.each { def route ->
 }
 
 g.shutdown()
-g = HadoopGraph.open(PROJECT_DIR + "/conf/hadoop/openflights-tp2.properties")
+g = HadoopFactory.open(PROJECT_DIR + "/conf/hadoop/openflights-tp2.properties")
 g._()
 
